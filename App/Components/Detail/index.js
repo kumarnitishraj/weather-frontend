@@ -16,11 +16,12 @@ import {
     ListView,
     NetInfo,
 
+
 } from 'react-native';
 
 import { save } from '../../redux/network'
 
-import { Colors } from '../../../Config/Constants'
+import { Colors, FontSize } from '../../../Config/Constants'
 import LinearGradient from 'react-native-linear-gradient';
 
 class Button extends Component {
@@ -68,52 +69,68 @@ export default class Home extends Component {
                 console.error(error)
             })
         }
-        
+
     }
 
     render() {
 
         const { navigation } = this.props;
-        
+
         const { detail } = navigation.state.params;
         //console.log(detail)
         return (
             <View style={styles.container}>
+
                 <View style={{ flex: 8,flexDirection:'column' }}>
-                <LinearGradient 
+                <LinearGradient
                     colors={[Colors.GRADIENT_COLOR_LIGHT, Colors.GRADIENT_COLOR_DARK]}
                     style = {{flex:1}}
                 >
+                <TouchableOpacity onPress = {()=> navigation.goBack()}
+                  style = {{position:'absolute',top:2}}
+                >
+                  <Image
+                  style = {{height:25,width:25,}}
+                  source = {require('../../Assets/back.png')}
+                  />
+                </TouchableOpacity>
+
                     <View style={{ flex: 6, flexDirection: 'column' }}>
-                        <View style={{ 
-                            flex: 1, 
+
+                        <View style={{
+                            flex: 1,
                             alignItems:'center',
                             justifyContent:'center'
                             }}>
-                            <Text style={{ fontSize: 40, fontFamily:'AppleSDGothicNeo-Bold',color:Colors.GENERIC_TEXT_COLOR_WHITE}} >
+                            <Text style={{
+                              fontSize: FontSize.LOCATION_NAME,
+                              fontWeight:FontSize.LIST_WEIGHT,
+                              fontFamily:'AppleSDGothicNeo-Bold',
+                              color:Colors.GENERIC_TEXT_COLOR_WHITE
+                            }} >
                                 {'Banglore'}
                             </Text>
-                            <Text style={{ fontSize: 30, fontFamily: 'Chalkboard SE', color: Colors.GENERIC_TEXT_COLOR_WHITE }} >
+                            <Text style={{ fontSize: FontSize.WEATHER, fontFamily: 'Chalkboard SE', color: Colors.GENERIC_TEXT_COLOR_WHITE }} >
                                 {detail.weather}
                             </Text>
                         </View>
-                        <View style={{ 
+                        <View style={{
                             flex: 1.5,
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexDirection:'row',
                              }}>
-                            <Text style={{ 
-                                fontSize: 150, 
-                                fontFamily: 'ArialHebrew', 
+                            <Text style={{
+                                fontSize:FontSize.TEMPERATURE,
+                                fontFamily: 'ArialHebrew',
                                 color: Colors.GENERIC_TEXT_COLOR_WHITE,
                                 }} >
                                     {detail.temperature}
                             </Text>
-                            <Circle 
-                            size={15}
+                            <Circle
+                            size={10}
                             borderColor = {Colors.GENERIC_TEXT_COLOR_WHITE}
-                            top = {50}
+                            top = {30}
                             borderWidth={3}
                             />
                         </View>
@@ -121,7 +138,7 @@ export default class Home extends Component {
                     <View style={{ flex: 4,flexDirection:'column' }}>
                         <View style={styles.midView} >
                             <View style={styles.midTextView} >
-                                <Text style={styles.midText} >{'Today'}</Text>
+                                <Text style={styles.midText} >{detail.day_name}</Text>
                             </View>
                             <View style={styles.midTextViewRight} >
                                     <Text style={styles.midText} >{detail.time}</Text>
@@ -134,10 +151,10 @@ export default class Home extends Component {
                             <View style={styles.midTextViewRight} >
                                     <Text style={styles.midText} >{detail.temperature}</Text>
                                 <Circle
-                                    size={7}
+                                    size={5}
                                     borderColor={Colors.GENERIC_TEXT_COLOR}
                                     top={7}
-                                    borderWidth={2}
+                                    borderWidth={1.5}
                                 />
                             </View>
                         </View>
@@ -150,19 +167,20 @@ export default class Home extends Component {
                             </View>
                         </View>
                         <View style={styles.midView} >
-                            
+
                         </View>
                     </View>
-                    </LinearGradient>
-                </View>
-                <View style={{ flex: 2, backgroundColor: Colors.GENERIC_TEXT_COLOR_WHITE }}>
                     <Button
                         text={'Send To Database'}
                         onPress={() =>this.saveToDatabase(detail) }
                     />
+                    </LinearGradient>
                 </View>
-                
-                
+                <View style={{ flex: 2 }}>
+
+                </View>
+
+
             </View>
         );
     }
@@ -173,9 +191,9 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: Colors.TRANSPRANT_BLACK,
     },
-    midView: { 
-        flex: 1, 
-        flexDirection: 'row', 
+    midView: {
+        flex: 1,
+        flexDirection: 'row',
     },
     midTextViewRight: {
         flex: 1,
@@ -183,26 +201,28 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection:'row',
     },
-    midTextView: { 
-        flex: 2, 
-        marginLeft:30,
-        justifyContent: 'center' 
+    midTextView: {
+        flex: 1.8,
+        marginLeft:15,
+        justifyContent: 'center'
     },
     midText:{
         color:Colors.GENERIC_TEXT_COLOR,
-        fontSize:20,
-        fontWeight: '600'
+        fontSize:FontSize.DETAIL,
+        fontWeight:FontSize.DETAIL_WEIGHT
     },
     ButtonText: {
         padding: 10,
         color: Colors.GENERIC_TEXT_COLOR,
-        fontSize: 20,
-        fontWeight: '600'
+        fontSize:FontSize.LIST,
+        fontWeight:FontSize.LIST_WEIGHT
     },
     ButtonView: {
         marginTop: 40,
+        // top:-100,
         marginBottom: 30,
         shadowColor: 'gray',
+        position:'relative',
         shadowOpacity: 1,
         shadowOffset: { width: 1, height: 1 },
         marginLeft: 50,
@@ -212,8 +232,9 @@ const styles = StyleSheet.create({
         borderRadius: 25,
         borderColor: '#fff',
         borderWidth: 1,
-        height: 50,
-        bottom: 65
+        // height: 50,
+        bottom: -55,
+        overflow:'hidden',
     },
 
 });

@@ -14,7 +14,7 @@ import {
     TouchableOpacity,
     ListView,
     NetInfo
-    
+
 } from 'react-native';
 
 import { Colors } from '../../../Config/Constants'
@@ -23,15 +23,16 @@ import { Circle } from '../Circle'
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from "react-redux";
 
-import { Metrics } from '../../../Config/Constants'
-import { getWeatherInfo } from '../../redux/actions/home'
+import { Metrics, FontSize } from '../../../Config/Constants'
+import { getWeatherInfo } from '../../redux/actions/home';
+import { data } from '../../../Config/Data'
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
 const WeatherList = ({ data, onPress }) => {
     //console.log(data)
     return(
-        <TouchableOpacity style={{ flexDirection: 'row',alignItems:'center',height:40}} 
+        <TouchableOpacity style={{ flexDirection: 'row',alignItems:'center',height:40}}
             onPress={onPress}
         >
             <View style = {{flex:1,}} >
@@ -40,7 +41,7 @@ const WeatherList = ({ data, onPress }) => {
                 </Text>
             </View>
             <View style = {{flex:0.5,justifyContent:'center',alignItems:'center'}} >
-                <Image 
+                <Image
                     source={require('../../Assets/cloudy-black.png')}
                     style = {{height:22,width:22}}
                 />
@@ -62,7 +63,7 @@ const WeatherList = ({ data, onPress }) => {
 const WeatherListToday = ({ data,onPress }) => {
     //console.log(data)
     return (
-        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', height: 40 }} 
+        <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', height: 40 }}
         onPress = {onPress}
         >
             <View style={{ flex: 1, }} >
@@ -73,7 +74,7 @@ const WeatherListToday = ({ data,onPress }) => {
             <View style={{ flex: 0.5, justifyContent: 'center', alignItems: 'center' }} >
                 <Image
                     source={require('../../Assets/cloudy.png')}
-                    style={{ height: 22, width: 22 }}
+                    style={{ height: 18, width: 18 }}
                 />
             </View>
             <View style={{ flex: 0.5, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }} >
@@ -93,11 +94,11 @@ const WeatherListToday = ({ data,onPress }) => {
 class HomeView extends Component {
     constructor(props){
         super(props)
-        
+
     }
     componentDidMount(){
         const { getWeatherInfo } = this.props;
-        
+
 
         NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
 
@@ -121,7 +122,7 @@ class HomeView extends Component {
         const { navigation } = this.props;
         if(i==0){
             return (
-                <WeatherListToday 
+                <WeatherListToday
                     data = {rowData}
                     onPress={() => navigation.navigate('Detail',{detail:rowData})}
                 />
@@ -134,20 +135,25 @@ class HomeView extends Component {
             />
         )
     }
-    
+
     render() {
-        
+
         const { Home, navigation } = this.props;
         var aboutToday = {
             temperature:'23',
             weather:'Sunny'
         } ;
         var datalist = [{}]
-        if(!!Home.weather){
+        if(!!Home.loaded){
             aboutToday = Home.weather[0];
             datalist = Home.weather;
+        }else{
+            datalist = data;
+            aboutToday = data[0]
         }
         var  dataSource = ds.cloneWithRows(datalist)
+
+
         return (
             <View style={styles.container}>
                 <View style={{ flex: 7, }}>
@@ -156,15 +162,15 @@ class HomeView extends Component {
                         style={{ flex: 1,flexDirection:'column',}}
                     >
                     <Text style={{
-                        fontSize:35,
-                        fontWeight:'600',
+                        fontSize:FontSize.LOCATION_NAME,
+                        fontWeight:FontSize.LOCATION_NAME_WEIGHT,
                         marginLeft:80,
                         backgroundColor:'rgba(0,0,0,0)',
                         color:'#fff',
                         marginTop:50,
                         }} >{'Bangalore'}</Text>
                     <Text style={{
-                        fontSize: 25,
+                        fontSize: FontSize.WEATHER,
                         marginLeft: 80,
                         fontFamily: 'Chalkboard SE',
                         backgroundColor: 'rgba(0,0,0,0)',
@@ -176,29 +182,29 @@ class HomeView extends Component {
                     <View style = {{flexDirection:'row'}} >
                     <TouchableOpacity onPress = {()=>this.call()} >
                     <Text style={{
-                        fontSize: 130,
+                        fontSize: FontSize.TEMPERATURE,
                         marginLeft: 80,
-                        fontWeight: '400',
+                        fontWeight: FontSize.LIST_WEIGHT,
                         backgroundColor: 'rgba(0,0,0,0)',
                         color: '#fff',
                         marginTop: 10,
                                 }} >{aboutToday.temperature}</Text></TouchableOpacity>
                     <Circle
-                        size={20}
+                        size={10}
                         borderColor={'#fff'}
                         top={-30}
                         borderWidth={3}
                     />
                     </View>
 
-                    <Image 
+                    <Image
                             source={require('../../Assets/weather.png')}
-                            style = {{height:200,width:200,position:'absolute',bottom:-20,right:0}}
+                            style = {{height:150,width:150,position:'absolute',bottom:-20,right:0}}
                     />
                     </LinearGradient>
                 </View>
                 <View style={{ flex: 4, backgroundColor: '#fff' }}>
-                    
+
                     <ListView
                         dataSource={dataSource}
                         renderRow={(rowData,j, i) => this.showListView(rowData,i)}
@@ -229,21 +235,21 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    listText: { 
-        marginLeft: 30, 
-        fontSize: 20, 
-        fontWeight: '600', 
-        color: Colors.GENERIC_TEXT_COLOR_BLACK, 
+    listText: {
+        marginLeft: 30,
+        fontSize: FontSize.LIST,
+        fontWeight: FontSize.LIST_WEIGHT,
+        color: Colors.GENERIC_TEXT_COLOR_BLACK,
     },
     listTextToday: {
         marginLeft: 30,
-        fontSize: 20,
-        fontWeight: '600',
+        fontSize: FontSize.LIST,
+        fontWeight: FontSize.LIST_WEIGHT,
         color: Colors.GENERIC_TEXT_COLOR,
     },
-    listView: { 
-        height: 150, 
-        justifyContent: 'center', 
+    listView: {
+        height: 150,
+        justifyContent: 'center',
     },
-    
+
 });

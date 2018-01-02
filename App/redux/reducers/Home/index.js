@@ -12,6 +12,7 @@ export default (state = initialState, action) => {
             return{
                 ...state,
                 weather:action.payload,
+                loaded:true,
             }
         
         case NETWORK_ERROR:

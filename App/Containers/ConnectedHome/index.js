@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { View, Platform,StatusBar } from "react-native";
 import Home from "../../Components/Home";
 import Detail from '../../Components/Detail';
-import TopBar from '../../Components/TapBar'
+import TopBar from '../../Components/TapBar';
+import { Colors } from '../../../Config/Constants'
 
 import { StackNavigator, NavigationActions } from "react-navigation";
 
@@ -11,7 +12,7 @@ import { StackNavigator, NavigationActions } from "react-navigation";
 const ConnectedRouter = {
     Home: { screen: Home },
     Detail: { screen: Detail },
-    
+
 };
 
 const ConnectedNavigator = StackNavigator(ConnectedRouter, {
@@ -25,7 +26,14 @@ export default class ConnectedHome extends Component {
     render() {
         return (
             <View style={{ flex: 1}} >
-                <TopBar />
+            {Platform.OS === 'ios'?
+            <TopBar />
+            :
+            <StatusBar
+             backgroundColor={Colors.GRADIENT_COLOR_DARK}
+             barStyle="light-content"
+           />}
+
                 <ConnectedNavigator  />
             </View>
         );
